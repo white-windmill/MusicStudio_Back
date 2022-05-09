@@ -92,3 +92,21 @@ def delarticle(request):
     articleData.delete()
 
     return JsonResponse({'ret': 0})
+
+def getallarticle(request):
+
+    qs = list(Article.objects.values())
+    for i in qs:
+        articleId = i['articleid']
+        commentData = list(Comment.objects.values().filter(articleid=articleId))
+        if commentData:
+            for j in commentData:
+                commentUserData =list(User.objects.values().filter(userid=j['userid_id']))
+                j.update({"userdata":commentUserData[0]})
+            i.update({"comment":commentData})
+        else:
+            i.update({"comment":[]})
+
+    data = list(qs)
+
+    return JsonResponse({'ret': 0, 'data': data})
