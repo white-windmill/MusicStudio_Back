@@ -40,8 +40,12 @@ def listuser(request):
     userCollectPlayListData = []
     #该处最后还要添加歌单封面图片
     for i in userCreatePlayList:
+        playlistData=list(PlayList.objects.values("playlistimage").filter(playlistname=i["playlistname"]))
+        i.update(playlistData[0])
         userCreatePlayListData.append(i)
     for j in userCollectPlayList:
+        playlistData=list(PlayList.objects.values("playlistimage").filter(playlistname=i["playlistname"]))
+        j.update(playlistData[0])
         userCollectPlayListData.append(j)
     data[0].update({"usercollectdata": userCollectPlayListData})
     data[0].update({"usercreatedata": userCreatePlayListData})
@@ -54,7 +58,6 @@ def register(request): #注册
     userId = request.params['userid']
     userName = request.params['username']
     passWord = request.params['password']
-
     User.objects.create(username=userName,password=passWord,userid=userId)
     userData = User.objects.get(userid=userId)
     PlayListCollection.objects.create(playlistname=userId + 'default', userid=userData)
