@@ -12,7 +12,7 @@ class User(models.Model):
     userid = models.CharField(max_length=200,primary_key=True)
     information = models.CharField(max_length=200,default='周杰伦')
     briefintroduction = models.CharField(max_length=200,default='这个人很懒，什么都没有留下')
-    #userimage = models.ImageField()用户头像
+    userimage = models.ImageField(upload_to='img/',default='')
 
 class Music(models.Model):
 
@@ -25,7 +25,7 @@ class PlayList(models.Model):
 
     playlistname = models.CharField(max_length=200)
     musicid = models.ForeignKey(Music,on_delete=DO_NOTHING)
-    # playlistcover = models.ImageField()歌单封面
+    playlistimage = models.ImageField(upload_to='img/',default='')
     playlistfounder = models.CharField(default="default",max_length=200)#如果为默认值则表示该歌单是默认歌单，不是用户创建歌单
 
 class History(models.Model):
@@ -42,9 +42,9 @@ class Article(models.Model):
     articlelike = models.IntegerField(default=0)#点赞数
     articlecomment = models.IntegerField(default=0)#评论数
     articletime = models.DateTimeField(default=0) #发帖时间
-    # articlepic1 = models.ImageField()
-    # articlepic2 = models.ImageField()
-    # articlepic3 = models.ImageField()
+    articlepic1 = models.ImageField(upload_to='img/',default='')
+    articlepic2 = models.ImageField(upload_to='img/',default='')
+    articlepic3 = models.ImageField(upload_to='img/',default='')
     userid = models.ForeignKey(User,on_delete=DO_NOTHING)
 
 class Comment(models.Model):
