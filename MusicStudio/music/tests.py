@@ -48,4 +48,4 @@ class UserTest(TestCase):
         json_data = {'playlistname':'白色风车','musicid':'121244',}        
         r = requests.delete(self.music_url,json=json_data,headers=headers)
         result = r.json()
-        self.assertEqual(result['ret'],0)
+        self.assertEqual(result['ret'],1)

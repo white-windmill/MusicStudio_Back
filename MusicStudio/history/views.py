@@ -37,18 +37,21 @@ def addhistory(request):
     perception = request.params['perception']
     musicName = request.params['musicname']
     musicSigner = request.params['musicsinger']
-    musicAlbym = request.params['musicalbum']
-    musicData = Music.objects.create(musicid=musicId,
+    musicAlbum = request.params['musicalbum']
+    try:
+        musicData = Music.objects.create(musicid=musicId,
                          musicname=musicName,
                          musicsinger=musicSigner,
-                         musicalbum=musicAlbym
+                         musicalbum=musicAlbum,
                          )
+    except:
+        musicData = Music.objects.get(musicid=musicId,)
     musicId = Music.objects.get(musicid = musicId)
     userId = User.objects.get(userid = userId)
     History.objects.create(listentime = listenTime,
                         musicid = musicId,
                         perception = perception,
-                        userid = userId
+                        userid = userId,
                         )
 
     return JsonResponse({'ret': 0})
