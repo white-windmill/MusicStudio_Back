@@ -21,8 +21,8 @@ def dispatcher(request):
 
 def listhistory(request):
 
-    historyData = simplejson.loads(request.body.decode(encoding="utf-8"))
-    userId = historyData["userid"]
+    #historyData = simplejson.loads(request.body.decode(encoding="utf-8"))
+    userId = request.GET.get("userid")
     qs = History.objects.values()
     qs = qs.filter(userid=userId)
     data = list(qs)

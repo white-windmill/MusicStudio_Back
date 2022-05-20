@@ -85,7 +85,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # 数据库引擎
         'NAME': 'musicback', #数据库名称
-        'USER': 'user', # 链接数据库的用户名
+        'USER': 'root', # 链接数据库的用户名
         'PASSWORD': '123456', # 链接数据库的密码
         'HOST': '127.0.0.1', # mysql服务器的域名和ip地址
         'PORT': '3306', # mysql的一个端口号,默认是3306

@@ -24,7 +24,7 @@ class Music(models.Model):
 class PlayList(models.Model):
 
     playlistname = models.CharField(max_length=200)
-    musicid = models.ForeignKey(Music,on_delete=DO_NOTHING)
+    musicid = models.ForeignKey(Music,on_delete=DO_NOTHING,default='-1')
     playlistimage = models.ImageField(upload_to='img/',default='')
     playlistfounder = models.CharField(default="default",max_length=200)#如果为默认值则表示该歌单是默认歌单，不是用户创建歌单
 

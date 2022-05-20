@@ -29,27 +29,40 @@ def dispatcher(request):
 
 def listuser(request):
 
-    userData = simplejson.loads(request.body.decode(encoding="utf-8"))
-    userId = userData["userid"]
+    #userData = simplejson.loads(request.body.decode(encoding="utf-8"))
+    userId =request.GET.get("userid")
     qs = User.objects.values()
-    qs = qs.filter(userid=userId)
-    data = list(qs)    #要包含创建的歌单和收藏的歌单两个的信息
-    userCollectPlayList = list(PlayListCollection.objects.values("playlistname").filter(userid=userId))#收藏的歌单
-    userCreatePlayList = list(PlayList.objects.values("playlistname").filter(playlistfounder=userId).distinct())#创建的歌单
     userCreatePlayListData = []
     userCollectPlayListData = []
-    #该处最后还要添加歌单封面图片
-    for i in userCreatePlayList:
-        playlistData=list(PlayList.objects.values("playlistimage").filter(playlistname=i["playlistname"]))
-        i.update(playlistData[0])
-        userCreatePlayListData.append(i)
-    for j in userCollectPlayList:
-        playlistData=list(PlayList.objects.values("playlistimage").filter(playlistname=i["playlistname"]))
-        j.update(playlistData[0])
-        userCollectPlayListData.append(j)
-    data[0].update({"usercollectdata": userCollectPlayListData})
-    data[0].update({"usercreatedata": userCreatePlayListData})
-    return JsonResponse({'ret': 0, 'data': data})
+    try:
+        qs = qs.filter(userid=userId)
+        data = list(qs)    #要包含创建的歌单和收藏的歌单两个的信息
+        try :
+            userCollectPlayList = list(PlayListCollection.objects.values("playlistname").filter(userid_id=userId).distinct())#收藏的歌单
+            if userCollectPlayList:
+                for j in userCollectPlayList:
+                    playlistData=list(PlayList.objects.values("playlistimage").filter(playlistname=j["playlistname"]))
+                    j.update(playlistData[0])
+                    userCollectPlayListData.append(j)
+        except:
+            userCollectPlayListData = []
+        try :
+            userCreatePlayList = list(PlayList.objects.values("playlistname").filter(playlistfounder=userId).distinct())#创建的歌单
+            if userCreatePlayList:
+                for i in userCreatePlayList:
+                    playlistData=list(PlayList.objects.values("playlistimage").filter(playlistname=i["playlistname"]))
+                    i.update(playlistData[0])
+                    userCreatePlayListData.append(i)
+        except:
+            userCreatePlayListData = []
+        
+        data[0].update({"usercollectdata": userCollectPlayListData})
+        data[0].update({"usercreatedata": userCreatePlayListData})
+        return JsonResponse({'ret': 0, 'data': data})
+    except:
+        return JsonResponse({'ret': 1})
+
+
 
 def register(request): #注册
 
@@ -87,14 +100,16 @@ def modifyuser(request): #修改
     information = request.POST.get('information')
     briefIntroduction = request.POST.get('introduce')
     userId = request.POST.get('userid')
-    print(userId)
+    #print(userId)
     try:
         modifyUser = User.objects.get(userid=userId)
     except :
         User.objects.create(username=userName,password=passWord,userid=userId,userimage=img)
         userData = User.objects.get(userid=userId)
         PlayListCollection.objects.create(playlistname=userId + 'default', userid=userData)
+        PlayList.objects.create(playlistname=userId + 'default',playlistfounder=userId)
         return JsonResponse({'ret': 0})
+
     if userName:
         modifyUser.username = userName
     if passWord:

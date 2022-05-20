@@ -5,5 +5,6 @@ from . import views
 
 urlpatterns = [
     path('',views.dispatcher),
-    path('all/',views.getallarticle)
+    path('all/',views.getallarticle),
+    path('del/',views.increasearticle),
 ]

@@ -12,9 +12,7 @@ def sign(request): #登录
     #data = simplejson.loads(request.bIDody.decode(encoding="utf-8"))
     #print(data)
     userId = request.GET.get('userid')
-    print(userId)
     passWord = request.GET.get('password')
-    print(passWord)
     #userId = data["userid"]
     #data = simplejson.loads(request.body)
     #passWord = data['password']

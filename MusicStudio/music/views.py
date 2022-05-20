@@ -35,21 +35,35 @@ def collectmusic(request): #收藏歌曲
         Music.objects.create(musicid=musicId, musicname=musicName, musicsinger=musicSigner
                                          ,musicalbum=musicAlbym)
     musicData = Music.objects.get(musicid=musicId)
-    print(musicData)
+    #print(musicData)
     try :
         PlayList.objects.get(musicid=musicId,playlistname=playlistName,playlistfounder=userId)
     except :
         PlayList.objects.create(musicid=musicData, playlistname=playlistName, playlistfounder=userId)
         return JsonResponse({
             'ret': 0
-        })
+})
     return JsonResponse({'ret': 1,'msg': '该歌曲已经在当前歌单里了'})
 
 def nocollectmusic(request): #取消收藏
 
-    userId = request.params['userid']
+    musicId = request.params['musicid']
     playlistName = request.params['playlistname']
-    PlayListCollectionData = PlayListCollection.objects.get(playlistname = playlistName,userid = userId)
-    PlayListCollectionData.delete()
+    try:
+        PlayListData = PlayList.objects.get(playlistname = playlistName,musicid = musicId)
+        PlayListData.delete()
+        return JsonResponse({'ret': 0})
+    except:
+        return JsonResponse({'ret': 1,'data':'已经取消收藏'})       
 
-    return JsonResponse({'ret': 0})
+def rank(request):
+
+    qs =list(Music.objects.values())
+    data=[]
+    for i in range(10):
+        data.append(qs[i])
+    return JsonResponse({'ret': 0,"data":data})
+
+
+
+    

@@ -21,22 +21,23 @@ def dispatcher(request):
     elif request.method == 'POST':
         request.params = json.loads(request.body)
         return postcomment(request)
-
+    
     else:
         return JsonResponse({'ret': 1, 'msg': 'error'})
 
 def listcomment(request):
-
-    commentData = simplejson.loads(request.body.decode(encoding="utf-8"))
-    playlistName = commentData[""]
-    musicIdData = PlayList.objects.filter(playlistname=playlistName).values()
-    data = list(musicIdData)
-    print(data)
-    musicData = []
-    for i in data:
-        musicId = i['musicid_id']
-        musicData.append(list(Music.objects.filter(musicid=musicId).values())[0])
-    return JsonResponse({'ret': 0, 'data': musicData})
+    
+    articleId = request.GET.get('articleid')
+    data=[]
+    commentData = list(Comment.objects.values().filter(articleid=articleId))
+    if commentData:
+        for j in commentData:
+            commentUserData = list(User.objects.values().filter(userid=j['userid_id']))
+            j.update({"userdata": commentUserData[0]})
+        data.append({"comment": commentData})
+    else:
+        data.append({"comment": []})
+    return JsonResponse({'ret': 0, 'data': data})
 
 def postcomment(request):
 

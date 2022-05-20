@@ -37,8 +37,9 @@ def listarticle(request):
     qs = list(qs.filter(userid=userId))
     for i in qs:
         articleId = i['articleid']
-        #userId = i['userid']
-        #articleUserData = list(User.objects.values().filter(userid=userId))
+        userId = i['userid']
+        articleUserData = list(User.objects.values().filter(userid=userId))
+        #print(articleUserData)
         commentData = list(Comment.objects.values().filter(articleid=articleId))
         if commentData:
             for j in commentData:
@@ -77,6 +78,16 @@ def changearticle(request):
     articleData.save()
     return JsonResponse({'ret': 0})
 
+def increasearticle(request):
+    
+    request.params = json.loads(request.body)
+    articleId = request.params['articleid']
+    articleData = Article.objects.get(articleid=articleId)
+    articlelikeNum = articleData.articlelike - 1
+    articleData.articlelike= articlelikeNum
+    articleData.save()
+    return JsonResponse({'ret': 0})
+
 def delarticle(request):
 
     articleId = request.params['articleid']
@@ -86,12 +97,13 @@ def delarticle(request):
     return JsonResponse({'ret': 0})
 
 def getallarticle(request):
-
     qs = list(Article.objects.values())
     for i in qs:
         articleId = i['articleid']
-        #userId = i['userid']
-        #articleUserData = list(User.objects.values().filter(userid=userId))
+        userId = i['userid_id']
+        articleUserData = list(User.objects.values().filter(userid=userId))
+        #print(articleUserData)
+        i.update({"articleuserdata":articleUserData[0]})
         commentData = list(Comment.objects.values().filter(articleid=articleId))
         if commentData:
             for j in commentData:
