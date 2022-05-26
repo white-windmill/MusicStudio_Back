@@ -34,7 +34,9 @@ def getimg(request):
     return JsonResponse({'ret': 0,'img':img_url})
 
 def postimg(request):
-    file_content = ContentFile(request.FILES['img'].read())
+
+    img = request.FILES['img']
+    url = 'http://124.220.169.238:8000/media/img/'+str(img)
     img = ImageTest(image1=request.FILES['img'])
     img.save()
-    return JsonResponse({'ret': 0})
+    return JsonResponse({'ret': 0,'data':url})

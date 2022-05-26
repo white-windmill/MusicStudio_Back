@@ -42,9 +42,12 @@ class Article(models.Model):
     articlelike = models.IntegerField(default=0)#点赞数
     articlecomment = models.IntegerField(default=0)#评论数
     articletime = models.DateTimeField(default=0) #发帖时间
-    articlepic1 = models.ImageField(upload_to='img/',default='')
-    articlepic2 = models.ImageField(upload_to='img/',default='')
-    articlepic3 = models.ImageField(upload_to='img/',default='')
+    articlepic1 = models.CharField(max_length=200)
+    articlepic2 = models.CharField(max_length=200)
+    articlepic3 = models.CharField(max_length=200)
+    # articlepic1 = models.ImageField(upload_to='img/',default='')
+    # articlepic2 = models.ImageField(upload_to='img/',default='')
+    # articlepic3 = models.ImageField(upload_to='img/',default='')
     userid = models.ForeignKey(User,on_delete=DO_NOTHING)
 
 class Comment(models.Model):

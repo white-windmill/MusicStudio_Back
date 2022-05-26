@@ -17,7 +17,10 @@ class UserTest(TestCase):
         self.assertEqual(data[0]['username'],"test")
 
     def setUp(self):
-
+ 
+        self.all_url = 'http://124.220.169.238:8000/api/article/all/'
+        #self.del_url = 'http://124.220.169.238:8000/api/article/del/'
+        self.article_url = 'http://124.220.169.238:8000/api/article/'
         self.playlist_url = 'http://124.220.169.238:8000/api/playlist/'  
         self.ret_url = 'http://124.220.169.238:8000/api/playlist/ret/'
         self.rank_url = 'http://124.220.169.238:8000/api/playlist/rank/'
@@ -25,6 +28,7 @@ class UserTest(TestCase):
         self.playlist_test_error_name = '白色1234245'
         self.playlist_test_userid = '1935010205'
         self.playlist_test_error_userid = '1935010333'
+        self.article_test_id = '1935010205'
         
     #GET查询userid参数
     def test_get(self):
@@ -50,6 +54,14 @@ class UserTest(TestCase):
         self.playlist_test_error_name)
         result = ret.json()
         self.assertEqual(result['ret'],0)
+       
+        ret = requests.get(self.all_url)
+        result = ret.json()
+        self.assertEqual(result['ret'],0)
+
+        ret = requests.get(self.article_url+'?userid='+self.article_test_id)
+        result = ret.json()
+        self.assertEqual(result['ret'],0)
 
     def test_post(self):
         
@@ -57,6 +69,15 @@ class UserTest(TestCase):
         json_data = {'userid':'1935010205','playlistname':'白色风车'}
         r = requests.post(self.playlist_url,json=json_data,headers=headers)
         result = r.json()
+        self.assertEqual(result['ret'],0)
+    
+    def test_put(self):
+
+        headers = {"content-type":"application/json"}
+        json_data = {'articleid':'19350102052021-12-4 18:45'}
+        r = requests.put(self.article_url,json=json_data,headers=headers)
+        result = r.json()
+        print(result)
         self.assertEqual(result['ret'],0)
 
     def test_delete(self):

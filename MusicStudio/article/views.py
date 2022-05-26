@@ -32,25 +32,28 @@ def dispatcher(request):
 def listarticle(request):
     # userData = simplejson.loads(request.body.decode(encoding="utf-8"))
     # if userData:
-    userId = request.GET.get["userid"]
+    userId = request.GET.get("userid")
     qs = Article.objects.values()
     qs = list(qs.filter(userid=userId))
-    for i in qs:
-        articleId = i['articleid']
-        userId = i['userid']
-        articleUserData = list(User.objects.values().filter(userid=userId))
-        #print(articleUserData)
-        commentData = list(Comment.objects.values().filter(articleid=articleId))
-        if commentData:
-            for j in commentData:
-                commentUserData = list(User.objects.values().filter(userid=j['userid_id']))
-                j.update({"userdata": commentUserData[0]})
-            i.update({"comment": commentData})
-        else:
-            i.update({"comment": []})
-
-    data = list(qs)
-    return JsonResponse({'ret': 0, 'data': data})
+    try:
+        for i in qs:
+            articleId = i['articleid']
+            userId = i['userid']
+            articleUserData = list(User.objects.values().filter(userid=userId))
+            #print(articleUserData)
+            commentData = list(Comment.objects.values().filter(articleid=articleId))
+            if commentData:
+                for j in commentData:
+                    commentUserData = list(User.objects.values().filter(userid=j['userid_id']))
+                    j.update({"userdata": commentUserData[0]})
+                i.update({"comment": commentData})
+            else:
+                i.update({"comment": []})
+        data = list(qs)
+        return JsonResponse({'ret': 0, 'data': data})
+    except:
+        data = list(qs)
+        return JsonResponse({'ret': 0, 'data': data})
     
 def creatarticle(request):
 
@@ -59,9 +62,9 @@ def creatarticle(request):
     articleContent = request.POST.get('articlecontent')
     articleTime =request.POST.get('articletime')
     articleId = userId + articleTime
-    articlePic1 = request.FILES['articlepic1']
-    articlePic2 = request.FILES['articlepic2']
-    articlePic3 = request.FILES['articlepic3']
+    articlePic1 = request.POST.get('articlepic1')
+    articlePic2 = request.POST.get('articlepic2')
+    articlePic3 = request.POST.get('articlepic3')
     Article.objects.create(userid=userData,articlecontent=articleContent,
                            articletime=articleTime,articleid=articleId,
                            articlepic1=articlePic1,
