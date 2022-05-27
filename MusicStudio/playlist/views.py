@@ -76,7 +76,6 @@ def rank(request):
 
     playlistData = list(PlayList.objects.values())
     s=len(playlistData)
-    #print(len(playlistData))
     data=[]
     sign=0
     for i in range(s):
@@ -84,14 +83,16 @@ def rank(request):
             for j in data:
                 if j['playlistname']==playlistData[i]['playlistname']:
                     sign=1
+                if playlistData[i]['playlistname'][-7:-1]=='defaul':
+                    sign=1
+                print(playlistData[i]['playlistname'][-7:-1])
             if sign==0:
                 data.append(playlistData[i])
         else:    
-            data.append(playlistData[i])
+            if playlistData[i]['playlistname'][-7:-1]!='defaul':
+                data.append(playlistData[i])
         sign=0
     fristimg=playlistData[0]['playlistimage']
-    #print(fristimg)
-    data.append({"img": fristimg})
     return JsonResponse({'ret': 0,"data":data})
 
 def testret(request):
@@ -111,9 +112,8 @@ def creatplaylist(request):
 
     playlistName = request.POST.get('playlistname')
     playlistFounder = request.POST.get('userid')
-    musicId = request.POST.get('musicid')
     img = request.FILES['playlistimage']
-    musicData = Music.objects.get(musicid=musicId)
+    musicData = Music.objects.get(musicid=-1)
     s=PlayList.objects.create(playlistimage=img,playlistfounder=playlistFounder,playlistname=playlistName,
     musicid =musicData)
     return JsonResponse({'ret': 0})

@@ -55,14 +55,11 @@ def listuser(request):
                     userCreatePlayListData.append(i)
         except:
             userCreatePlayListData = []
-        
         data[0].update({"usercollectdata": userCollectPlayListData})
         data[0].update({"usercreatedata": userCreatePlayListData})
         return JsonResponse({'ret': 0, 'data': data})
     except:
         return JsonResponse({'ret': 1})
-
-
 
 def register(request): #注册
 
@@ -107,7 +104,7 @@ def modifyuser(request): #修改
         User.objects.create(username=userName,password=passWord,userid=userId,userimage=img)
         userData = User.objects.get(userid=userId)
         PlayListCollection.objects.create(playlistname=userId + 'default', userid=userData)
-        PlayList.objects.create(playlistname=userId + 'default',playlistfounder=userId)
+        PlayList.objects.create(playlistname=userId + 'default',playlistfounder=userId,playlistimage='/img/1255.png')
         return JsonResponse({'ret': 0})
 
     if userName:

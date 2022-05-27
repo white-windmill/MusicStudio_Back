@@ -32,5 +32,6 @@ urlpatterns = [
     path('api/comment/', include('comment.urls')),
     path('api/article/', include('article.urls')),
     path('api/imgurl/', include('pictest.urls')),
+    path('api/search/', include('search.urls')),
     path(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
