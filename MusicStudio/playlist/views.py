@@ -39,11 +39,26 @@ def listplaylist(request):
     if musicIdData:
         data = list(musicIdData)
         musicData = []
+        s=0
         for i in data:
             musicId = i['musicid_id']
             print(musicId)
             if musicId != '-1':
-                musicData.append(list(Music.objects.filter(musicid=musicId).values())[0])
+    # qs =list(Music.objects.values())
+    # data=[]
+    # s=0
+    # print(qs)
+    # for i in range(5):
+    #     if qs[i]['musicid']!='-1':
+    #         qs[i].update({"sub":s})
+    #         data.append(qs[i])
+    #         s+=1
+                qs = list(Music.objects.filter(musicid=musicId).values())[0]
+                #print(qs)
+                qs.update({"sub":s})
+                #print(qs)
+                musicData.append(qs)
+                s+=1
         return JsonResponse({'ret': 0, 'data': musicData})
     else:
         return JsonResponse({'ret': 1})

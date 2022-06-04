@@ -42,7 +42,7 @@ def collectmusic(request): #收藏歌曲
         PlayList.objects.create(musicid=musicData, playlistname=playlistName, playlistfounder=userId)
         return JsonResponse({
             'ret': 0
-})
+        })
     return JsonResponse({'ret': 1,'msg': '该歌曲已经在当前歌单里了'})
 
 def nocollectmusic(request): #取消收藏
@@ -60,8 +60,13 @@ def rank(request):
 
     qs =list(Music.objects.values())
     data=[]
-    for i in range(10):
-        data.append(qs[i])
+    s=0
+    print(qs)
+    for i in range(5):
+        if qs[i]['musicid']!='-1':
+            qs[i].update({"sub":s})
+            data.append(qs[i])
+            s+=1
     return JsonResponse({'ret': 0,"data":data})
 
 
