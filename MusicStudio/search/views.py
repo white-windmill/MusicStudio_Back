@@ -13,8 +13,10 @@ def search(request):
     result_data = []
     sign=0
     data = request.GET.get('search')
-    musicnamedata = list(Music.objects.filter(musicname__contains=data,musicsinger__contains=data).values())
+    musicnamedata = list(Music.objects.filter(musicname__contains=data).values())
     musicsignerdata = list(Music.objects.filter(musicsinger__contains=data).values())
+    print(musicnamedata)
+    print(musicsignerdata)  
     if len(musicnamedata)!=0:   
         sign=1
         for i in range(len(musicnamedata)):

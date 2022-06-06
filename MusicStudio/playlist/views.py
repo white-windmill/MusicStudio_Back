@@ -127,8 +127,8 @@ def creatplaylist(request):
 
     playlistName = request.POST.get('playlistname')
     playlistFounder = request.POST.get('userid')
-    img = request.FILES['playlistimage']
+#    img = request.FILES['playlistimage']
     musicData = Music.objects.get(musicid=-1)
-    s=PlayList.objects.create(playlistimage=img,playlistfounder=playlistFounder,playlistname=playlistName,
+    s=PlayList.objects.create(playlistimage='/img/777.jpg',playlistfounder=playlistFounder,playlistname=playlistName,
     musicid =musicData)
     return JsonResponse({'ret': 0})

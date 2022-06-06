@@ -26,7 +26,14 @@ def listhistory(request):
     qs = History.objects.values()
     qs = qs.filter(userid=userId)
     data = list(qs)
-
+    #print(data)
+    for i in data:
+         print(i)
+         musicdata=Music.objects.values("musicname").filter(musicid=i["musicid_id"])
+         print(musicdata)
+         musicname=list(musicdata)[0]
+         print(musicname)
+         i.update(musicname)
     return JsonResponse({'ret': 0, 'data': data})
 
 def addhistory(request):
@@ -48,6 +55,7 @@ def addhistory(request):
         musicData = Music.objects.get(musicid=musicId,)
     musicId = Music.objects.get(musicid = musicId)
     userId = User.objects.get(userid = userId)
+    print(userId)
     History.objects.create(listentime = listenTime,
                         musicid = musicId,
                         perception = perception,
