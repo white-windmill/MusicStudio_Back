@@ -26,9 +26,9 @@ def collectmusic(request): #收藏歌曲
     userId = request.params['userid']
     playlistName = request.params['playlistname']
     musicId = request.params['musicid']
-    musicName = request.params['musicname']
-    musicSigner = request.params['musicsinger']
-    musicAlbym = request.params['musicalbum']
+    #musicName = request.params['musicname']
+    #musicSigner = request.params['musicsinger']
+    #musicAlbym = request.params['musicalbum']
     try :
         Music.objects.get(musicid=musicId)
     except :
@@ -62,7 +62,7 @@ def rank(request):
     data=[]
     s=0
     print(qs)
-    for i in range(5):
+    for i in range(10):
         if qs[i]['musicid']!='-1':
             qs[i].update({"sub":s})
             data.append(qs[i])

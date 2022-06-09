@@ -7,5 +7,6 @@ urlpatterns = [
     path('',views.dispatcher),
     path('creat/',views.creatplaylist),
     path('rank/',views.rank),
-    path('ret/',views.testret)
+    path('ret/',views.testret),
+    path('del/',views.delplaylist)
 ]

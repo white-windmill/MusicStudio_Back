@@ -3,5 +3,6 @@ from django.urls import path
 from django.urls import path, include
 from . import views
 urlpatterns = [
-    path('',views.search)
+    path('',views.search),
+    path('playlist/',views.searchplaylist)
 ]

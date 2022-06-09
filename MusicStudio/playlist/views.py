@@ -80,11 +80,15 @@ def nocollectplaylist(request):
     userId = request.params['userid']
     playListName = request.params['playlistname']
     #musicId = request.params['musicid']
+    
     userData = User.objects.get(userid=userId)
-    playListCollectionData = PlayListCollection.objects.get(playlistname = playListName,userid = userId,)
-    playListCollectionData.delete()
+    try:
+      playListCollectionData = PlayListCollection.objects.get(playlistname = playListName,userid = userId,)
+      playListCollectionData.delete()
     # playListData = PlayList.objects.get(playlistname = playListName,musicid = musicId)
     # playListData.delete()
+    except:
+      return JsonResponse({'ret':1,'data':'您还未收藏该歌单!'})
     return JsonResponse({'ret': 0})
 
 def rank(request):
@@ -131,4 +135,20 @@ def creatplaylist(request):
     musicData = Music.objects.get(musicid=-1)
     s=PlayList.objects.create(playlistimage='/img/777.jpg',playlistfounder=playlistFounder,playlistname=playlistName,
     musicid =musicData)
+    return JsonResponse({'ret': 0})
+
+def delplaylist(request):
+    request.params = json.loads(request.body)
+    userId = request.params['userid']
+    playListName = request.params['playlistname']
+    #musicId = request.params['musicid']
+
+    userData = User.objects.get(userid=userId)
+    try:
+      playListData = PlayList.objects.get(playlistname = playListName,playlistfounder = userId,)
+      playListData.delete()
+    # playListData = PlayList.objects.get(playlistname = playListName,musicid = musicId)
+    # playListData.delete()
+    except:
+      return JsonResponse({'ret':1,'data':'不是您创建的歌单！'})
     return JsonResponse({'ret': 0})
